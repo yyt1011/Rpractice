@@ -1,0 +1,62 @@
+---
+title: "ShowMeMyLegend"
+author: "Yutong"
+date: "9/10/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+The csv file contains the how many refugees the US planed to recieve and how many the US admitted over the past decade. I want to draw a bar chart, showing the number of refugee ceilings every year, and a line chart of actual arrival numbers, and lay the two charts together to make a comparison.
+
+First, I need to do a little data cleaning.
+
+I tried to plot the bar chart just to see how it looked like, when I noticed that the legend didn't pop up automatically. So, I googled it and now I'm trying to use `r reshape` library to do the trick.
+
+Here I need to introduce two new terms: wide-term and long-term. In short, these are two ways to structure data. 
+
+With wide-term, you have, for example, the first row of the name of variables (factors), and you put values under each column according to their catagories.
+
+```{r}
+library(ggplot2)
+library(reshape2)
+df <- read.csv('ceiling.csv')
+names(df) <- tolower(names(df))
+head(df)
+```
+
+With long-term, each variable has a value:
+(So, a sheet of data in long-term, instead of wide-term, is generally longer.And wide-term sheet are usually expand more space. That's how I remember these terms.)
+```{r}
+dfl <- melt(df) #data frame long-term
+dfl
+```
+
+In many cases, you need to tell `r melt` "ID Variables" so as to keep the variables that you want to treat as indicators of your data untouched. These ID Variables are like the attributes to the value, so you don't want to mess with them. The code looks like this:
+```{r}
+dfl<- melt(df, id.vars ="year")
+dfl
+```
+
+Now, the dataframe looks like what I need. The data breaks down by each year, that is to say, we can find two numbers - one for the ceiling and one for the admission - for each year since 2008.
+
+(Just a tip, we can also manipulate the column names with `r melt()` by adding `r variable.name = 'catagory_number', value.name = 'number'`)
+
+Now let's try to play with our modified dataset. Start from an easy one, let's make a gourped-bar chart!
+
+```{r}
+library (ggplot2)
+library (ggthemes)
+library (scales)
+
+head(dfl)
+
+ggplot(dfl, aes(x=factor(dfl$year), y=value, fill = variable))+
+  geom_bar(position = 'dodge', stat = "identity", width=0.85)+
+  scale_x_discrete(dfl$year)
+
+
+```
+Here, I made some twists for the x variable so as to show each year properly. R uses a different class of variable called _factor_ which, according to my understanding, is an indicator telling R that this is a catagery, and it's discrete, not continuous. 
+This is important for making tick marks because you call the `r scale_x_discrete()` method to mark the chart. As the name suggests, the x variable has to be discrete. And in order to correctly convert x variable into a `r factor`, you need to use the `r factor()` function when you draw the X-Axis.
