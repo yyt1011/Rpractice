@@ -58,5 +58,13 @@ ggplot(dfl, aes(x=factor(dfl$year), y=value, fill = variable))+
 
 
 ```
-Here, I made some twists for the x variable so as to show each year properly. R uses a different class of variable called _factor_ which, according to my understanding, is an indicator telling R that this is a catagery, and it's discrete, not continuous. 
+Here, I made some twists for the x variable so that each year will show up properly. R uses a different class of variable called _factor_ which, according to my understanding, is an indicator telling R that this is a catagery, and it's discrete, not continuous. 
 This is important for making tick marks because you call the `r scale_x_discrete()` method to mark the chart. As the name suggests, the x variable has to be discrete. And in order to correctly convert x variable into a `r factor`, you need to use the `r factor()` function when you draw the X-Axis.
+
+Now let's change this bar chart into a line chart:
+```{r}
+head(dfl)
+ggplot(dfl, aes(x=year, y=value, group=variable))+
+  geom_line(aes(color=variable))
+```
+Some take away here to take from here. I finally figured out how to use `r group` to break down my data. That is, you pass the name of the attribute to the `r group` to let the computer know that there are more than just 1 lines you want to make. Second, if you want to paint the lines in different color, use the `r geom_line(aes(color=''))` function to do this.
