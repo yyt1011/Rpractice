@@ -36,6 +36,7 @@ dfl
 In many cases, you need to tell `r melt` "ID Variables" so as to keep the variables that you want to treat as indicators of your data untouched. These ID Variables are like the attributes to the value, so you don't want to mess with them. The code looks like this:
 ```{r}
 dfl<- melt(df, id.vars ="year")
+colnames(dfl) <- c('year','type','number')
 dfl
 ```
 
@@ -52,7 +53,7 @@ library (scales)
 
 head(dfl)
 
-ggplot(dfl, aes(x=factor(dfl$year), y=value, fill = variable))+
+ggplot(dfl, aes(x=factor(dfl$year), y=number, fill = type))+
   geom_bar(position = 'dodge', stat = "identity", width=0.85)+
   scale_x_discrete(dfl$year)
 
@@ -63,8 +64,26 @@ This is important for making tick marks because you call the `r scale_x_discrete
 
 Now let's change this bar chart into a line chart:
 ```{r}
-head(dfl)
-ggplot(dfl, aes(x=year, y=value, group=variable))+
-  geom_line(aes(color=variable))
+View(dfl)
+ggplot(dfl, aes(x=year, y=number, group=type))+
+  geom_line(aes(color=type))
 ```
 Some take away here to take from here. I finally figured out how to use `r group` to break down my data. That is, you pass the name of the attribute to the `r group` to let the computer know that there are more than just 1 lines you want to make. Second, if you want to paint the lines in different color, use the `r geom_line(aes(color=''))` function to do this.
+```{r}
+library(dplyr)
+ADM <- dfl %>%
+  filter(type == 'admitted')
+CAP <- dfl%>%
+  filter(type =='cap')
+
+ggplot(dfl, aes(x=factor(year), y=number,group=type,fill=type))+
+  geom_bar(stat='identity',width=0.8)
+
+ggplot(CAP, aes(x=factor(year), y=number))+
+  geom_bar(stat='identity',width=0.8,fill='lightblue')+
+  geom_line(data=ADM,aes(color=type,group=type))+
+  geom_point(data=ADM,aes(color=type))+
+  labs(title='Refugee arrival ceilings and admissions', x='Year', y='Number',color = '')
+#number of 2018 is subjected to change since its not the final number. 
+
+```
