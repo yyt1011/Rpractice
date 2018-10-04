@@ -64,11 +64,10 @@ This is important for making tick marks because you call the `r scale_x_discrete
 
 Now let's change this bar chart into a line chart:
 ```{r}
-View(dfl)
 ggplot(dfl, aes(x=year, y=number, group=type))+
   geom_line(aes(color=type))
 ```
-Some take away here to take from here. I finally figured out how to use `r group` to break down my data. That is, you pass the name of the attribute to the `r group` to let the computer know that there are more than just 1 lines you want to make. Second, if you want to paint the lines in different color, use the `r geom_line(aes(color=''))` function to do this.
+Some take away here. I finally figured out how to use `r group` to break down my data. That is, you pass the name of the attribute to the `r group` to let the computer know that there are more than just 1 lines you want to make. Second, if you want to paint the lines in different color, use the `r geom_line(aes(color=''))` function to do this.
 ```{r}
 library(dplyr)
 ADM <- dfl %>%
