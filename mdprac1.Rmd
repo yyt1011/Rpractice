@@ -20,9 +20,9 @@ library(reshape2)
 df <- read.csv('ceiling.csv',stringsAsFactors = FALSE)
 dfl <- melt(df, id.vars='YEAR')
 colnames(dfl) <- c('year','type','number')
-View(dfl)
-ggplot(dfl, aes(x=factor(year), y=number, fill=type))+
-  geom_bar(position='dodge', stat='identity',width=0.8)
+ggplot(dfl, aes(x=factor(year), y=number,fill=type))+
+  geom_bar(position='dodge', stat='identity',width=0.8)+
+  theme_economist()
 ```
 
 The Catholic Charities managed the refugee resettlement program by receiving federal grants each year based on the number of refugees it receives.
@@ -35,18 +35,26 @@ In January of 2017, President Trump signed an executive order, known as the trav
 
 During the Obama Administration, incoming refugees were capped at about 85,000 every year. However, after Trump took office, he downsized that number to a record low of 45,000.
 
+The local impact is obvious. Columbia received more than 200 refugees in 2016 but only 122 last year. As for this year, Lester said he didn’t expect the overall number to go up anytime soon.
+
 ```{r echo = FALSE}
 df <- read.csv('CO.csv')
-head(df)
-ggplot(df, aes(YEAR))+
-  geom_line(aes(y = COLUMBIA, color = 'COLUMBIA'))+
-  geom_line(aes(y = MISSOURI, color = 'MISSOURI'))+
-  theme_fivethirtyeight()+
-  scale_color_fivethirtyeight()+
-  ggtitle("2002-2018 Refugee Arrivals - Columbia and Missouri")+
-  theme(plot.title = element_text(size = 13))
+duplicated(df$total_city)
+dftotal_city <- df[!duplicated(df$total_city),]
+ggplot(dftotal_city)+
+  geom_bar(stat='identity',aes(x = FY,y = total_city), width = 0.8)+
+  scale_x_discrete(
+    labels=c('2002','2003','2004','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018')
+                   )+
+  scale_y_continuous(breaks=seq(0,250,50))+
+  labs(
+    x=' ',
+    y='Refugees arrived in Columbia',
+    title='Columbia Refugee arrivals plummeted again in 2018',
+    subtitle='After a booming in refugee arrival in 2016, the number of refugee settled in Columbia dropped\ndramatically in 2017, and the downward trend continues in 2018. '
+  )+
+  theme_economist()
 ```
-The local impact is obvious. Columbia received more than 200 refugees in 2016 but only 122 last year. As for this year, Lester said he didn’t expect the overall number to go up anytime soon.
 
 Somalis are among the most affected refugees seeking asylum in Columbia. “This year we haven’t got anyone from Somalia, and that used to be one of the bigger population we resettled,” the organization’s community outreach coordinator Alex Ringling said.
 
@@ -57,17 +65,6 @@ According to the State Department Refugee Processing Center, 409 refugees from B
 For people from African countries, they are more likely to face racism on top of cultural differences and language barriers. But for Somalis, their religion makes it even harder for them to find a home in the United States.
 
 Both 2002 and 2003 saw a sharp decrease in the number of admissions due to the fear of terrorism after the attacks of Sept. 11, and that fear was reflected in the work with refugees. “Unfortunately, a lot of folks we resettle come from predominantly Muslim countries. You end up getting some negative backlash.” Lester said.
-
-```{r echo = False}
-df <- read.csv('columbia_refugee_nationality.csv', stringsAsFactors = FALSE)
-                                                                        
-ggplot(df, aes(x=nationality, y=number) ) + 
-  geom_bar(stat = "identity",fill = "#008FD5", width = 0.8)+ 
-  coord_cartesian(ylim=c(0,400))+
-  coord_flip()+
-  theme_fivethirtyeight()+
-  ggtitle("2002-2018 Refugee Arrivals by Nationality")
-```
 
 “But then things stabilize,” he said, “And then you get changes in the administration.”
 
