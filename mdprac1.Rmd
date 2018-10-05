@@ -1,5 +1,8 @@
 ---
-- title:CoMo Refugee Report author:Yutong output:html_docutment
+title: "CoMo Refugee Report"
+author: "Yutong"
+date: "10/5/2018"
+output: html_document
 ---
 #Low number of refugee arrivals continue in FY 2018
 
@@ -17,7 +20,7 @@ library (ggthemes)
 library (scales)
 library(reshape2)
 
-df <- read.csv('ceiling.csv',stringsAsFactors = FALSE)
+df <- read.csv('ceiling.csv',fileEncoding = "UTF-8-BOM",stringsAsFactors = FALSE)
 dfl <- melt(df, id.vars='YEAR')
 colnames(dfl) <- c('year','type','number')
 ggplot(dfl, aes(x=factor(year), y=number,fill=type))+
@@ -60,7 +63,7 @@ Somalis are among the most affected refugees seeking asylum in Columbia. “This
 
 According to the State Department Refugee Processing Center, 409 refugees from Burma, 231 from Democratic Republic of Congo, 190 from Iraq, 173 from Eritrea, and 149 from Somalia have arrived in Columbia since 2002.
 
-![Where are people who resettled in Columbia from?](~/Documents/GitHub/Rpractice/Columbia_Refugee_Map.png)
+![Where are people who resettled in Columbia from?](Columbia_Refugee_Map.png)
 
 For people from African countries, they are more likely to face racism on top of cultural differences and language barriers. But for Somalis, their religion makes it even harder for them to find a home in the United States.
 
