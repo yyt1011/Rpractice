@@ -25,7 +25,11 @@ dfl <- melt(df, id.vars='YEAR')
 colnames(dfl) <- c('year','type','number')
 ggplot(dfl, aes(x=factor(year), y=number,fill=type))+
   geom_bar(position='dodge', stat='identity',width=0.8)+
-  theme_economist()
+  theme_economist()+
+  labs(
+    x='YEAR',
+    y='NUMBER'
+  )
 ```
 
 The Catholic Charities managed the refugee resettlement program by receiving federal grants each year based on the number of refugees it receives.
